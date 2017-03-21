@@ -95,7 +95,10 @@ namespace MathsProblems
             //this.RunTest(Problem24.Lexicographic_permutations);
             //this.RunTest(Problem25.Thousannd_digit_Fibonacci_number);
             //this.RunTest(Problem26.Reciprocal_cycles);
-            this.RunTest(Problem27.Quadratic_primes);
+            //this.RunTest(Problem27.Quadratic_primes);
+            //this.RunTest(Problem28.Number_spiral_diagonals);
+            //this.RunTest(Problem29.Distinct_powers);
+            this.RunTest(Problem30.Digit_fifth_powers);
 
         }
 
