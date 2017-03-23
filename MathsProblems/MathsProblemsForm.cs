@@ -101,8 +101,8 @@ namespace MathsProblems
             //this.RunTest(Problem30.Digit_fifth_powers);
             //this.RunTest(Problem31.Coin_sums);
             //this.RunTest(Problem32.Pandigital_products);
-            this.RunTest(Problem33.Digit_cancelling_fractions);
-
+            //this.RunTest(Problem33.Digit_cancelling_fractions);
+            this.RunTest(Problem34.Digit_factorials); 
         }
 
 
