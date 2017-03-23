@@ -99,8 +99,9 @@ namespace MathsProblems
             //this.RunTest(Problem28.Number_spiral_diagonals);
             //this.RunTest(Problem29.Distinct_powers);
             //this.RunTest(Problem30.Digit_fifth_powers);
-            this.RunTest(Problem31.Coin_sums);
-            
+            //this.RunTest(Problem31.Coin_sums);
+            //this.RunTest(Problem32.Pandigital_products);
+            this.RunTest(Problem33.Digit_cancelling_fractions);
 
         }
 
