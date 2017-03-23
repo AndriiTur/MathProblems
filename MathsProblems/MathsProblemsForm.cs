@@ -102,7 +102,9 @@ namespace MathsProblems
             //this.RunTest(Problem31.Coin_sums);
             //this.RunTest(Problem32.Pandigital_products);
             //this.RunTest(Problem33.Digit_cancelling_fractions);
-            this.RunTest(Problem34.Digit_factorials); 
+            //this.RunTest(Problem34.Digit_factorials);
+            //this.RunTest(Problem35.Circular_primes);
+            this.RunTest(Problem36.Double_base_palindromes); 
         }
 
 
