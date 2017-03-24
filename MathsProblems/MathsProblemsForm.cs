@@ -106,7 +106,10 @@ namespace MathsProblems
             //this.RunTest(Problem35.Circular_primes);
             //this.RunTest(Problem36.Double_base_palindromes);
             //this.RunTest(Problem37.Truncatable_primes);
-            this.RunTest(Problem38.Pandigital_multiples);
+            //this.RunTest(Problem38.Pandigital_multiples);
+            //this.RunTest(Problem39.Integer_right_triangles);
+            this.RunTest(Problem40.Champernownes_constant);
+
         }
 
 
