@@ -108,7 +108,8 @@ namespace MathsProblems
             //this.RunTest(Problem37.Truncatable_primes);
             //this.RunTest(Problem38.Pandigital_multiples);
             //this.RunTest(Problem39.Integer_right_triangles);
-            this.RunTest(Problem40.Champernownes_constant);
+            //this.RunTest(Problem40.Champernownes_constant);
+            this.RunTest(Problem41.Pandigital_prime);
 
         }
 
