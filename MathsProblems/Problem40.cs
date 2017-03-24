@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace MathsProblems
 {
@@ -6,14 +7,18 @@ namespace MathsProblems
     {
         internal static string Champernownes_constant()
         {
-            string strVal = "0";
-            int i = 1;
+
+            StringBuilder stbuilder = new StringBuilder();
+            string strVal = "";
+            int i = 0;
             int result = 1;
-            while (strVal.Length <= 1000100)
+            while (stbuilder.Length <= 1000100)
             {
-                strVal += i.ToString();
+                //strVal += i.ToString();
+                stbuilder.Append(i.ToString());
                 i++;
             }
+            strVal = stbuilder.ToString();
             //result = result * int.Parse(strVal[0].ToString());
             for (int j = 1; j < strVal.Length; j = j * 10)
             {
