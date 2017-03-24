@@ -43,6 +43,7 @@ namespace MathsProblems
             }
             return result;
         }
+
         internal static bool Check_Pandigital_products(string valStr)
         {
             string checkStr = "123456789";

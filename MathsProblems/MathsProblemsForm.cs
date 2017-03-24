@@ -104,7 +104,9 @@ namespace MathsProblems
             //this.RunTest(Problem33.Digit_cancelling_fractions);
             //this.RunTest(Problem34.Digit_factorials);
             //this.RunTest(Problem35.Circular_primes);
-            this.RunTest(Problem36.Double_base_palindromes); 
+            //this.RunTest(Problem36.Double_base_palindromes);
+            //this.RunTest(Problem37.Truncatable_primes);
+            this.RunTest(Problem38.Pandigital_multiples);
         }
 
 

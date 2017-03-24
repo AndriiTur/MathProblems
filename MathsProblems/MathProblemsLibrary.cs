@@ -428,6 +428,20 @@ namespace MathsProblems
                     return ammDigits;
                 else return 0;
             }
+
+            internal static string Digit_To_Binary_Base(int digitVal)
+            {
+                string result = "";
+                while (digitVal >= 1)
+                {
+                    if (digitVal % 2 == 0)
+                        result = 0 + result;
+                    else
+                        result = 1 + result;
+                    digitVal = digitVal / 2;
+                }
+                return result;
+            }
         }
     }
 }
