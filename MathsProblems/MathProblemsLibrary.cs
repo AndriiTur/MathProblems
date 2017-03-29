@@ -442,6 +442,42 @@ namespace MathsProblems
                 }
                 return result;
             }
+
+            internal static bool Check_Pandigital_products(string valStr,int rank = 9)
+            {
+                string checkStr = "1234567890";
+                for (int i = 0; i < rank; i++)
+                {
+                    if (valStr.IndexOf(checkStr[i]) < 0)
+                        return false;
+                }
+                return true;
+            }
+
+            internal static List<Int64> Build_Pandigital_Digits(int rank, List<Int64> valList, string pandigitalStr = "")
+            {
+                List<Int64> resultList = new List<Int64> { };
+                Int64 digit = 0;
+                if (rank == 0)
+                {
+                    resultList.Add(Int64.Parse(pandigitalStr));
+                    return resultList;
+                }
+                for (int i = 0; i < valList.Count; i++)
+                {
+                    pandigitalStr += valList[i].ToString();
+                    digit = valList[i];
+                    valList.Remove(digit);
+                    //if (Build_Pandigital_Digits(rank - 1, valList, pandigitalStr).Count != 0)
+                    resultList.AddRange(Build_Pandigital_Digits(rank - 1, valList, pandigitalStr));
+                    if (valList.Count == 0)
+                        valList.Add(digit);
+                    else
+                        valList.Insert(i, digit);
+                    pandigitalStr = pandigitalStr.Remove(pandigitalStr.Length - 1);
+                }
+                return resultList;
+            }
         }
     }
 }
