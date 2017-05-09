@@ -13,7 +13,7 @@ namespace MathsProblems
             int digits = 0;
             int digitsTemp = 0;
 
-            strTemp =  LargeDigitsDestroyer.Degree_Numbers(2, 1000);
+            strTemp =  LargeDigitsDestroyer.Power_Numbers(2, 1000);
 
 
             for (int k = strTemp.Length - 1; k >= 0; k--)

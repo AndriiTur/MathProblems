@@ -15,7 +15,7 @@ namespace MathsProblems
             {
                 for (int j = 2; j <= maxValue; j++)
                 {
-                    validate = LargeDigitsDestroyer.Degree_Numbers(i, j);
+                    validate = LargeDigitsDestroyer.Power_Numbers(i, j);
                     if (result.IndexOf(validate) < 0)
                         result.Add(validate);
                 }

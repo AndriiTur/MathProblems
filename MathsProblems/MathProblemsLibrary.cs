@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -15,7 +16,8 @@ namespace MathsProblems
             internal static List<Int64> GetBelov(Int64 value)
             {
                 var resultList = new List<Int64>();
-                for (long i = 2; i <= value; i++)
+                resultList.Add(2);
+                for (long i = 3; i <= value; i += 2)
                 {
                     if (!HasMultiplier(i, resultList))
                         resultList.Add(i);
@@ -40,6 +42,18 @@ namespace MathsProblems
 
         internal class Divisors
         {
+
+            internal static Dictionary<Int64, List<Int64>> primeListOfDivisorsCache;
+
+            internal static Dictionary<Int64, List<Int64>> PrimeListOfDivisorsCache
+            { get
+                {
+                    if (primeListOfDivisorsCache == null)
+                        primeListOfDivisorsCache = new Dictionary<Int64, List<Int64>>();
+                    return primeListOfDivisorsCache;
+                }
+            }
+
             internal static int SummDivisor(int value)
             {
                 var resultlist = new List<Int64>();
@@ -71,8 +85,9 @@ namespace MathsProblems
                 return resultList;
             }
 
-            internal static List<Int64> GetPrimeList(Int64 value)
+            internal static List<Int64> GetPrimeListOfDivisors(Int64 value, bool useCache = false)
             {
+                var originalValue = value;
                 var resultlist = new List<Int64>();
                 for (long i = 2; i < value; i++)
                 {
@@ -82,12 +97,28 @@ namespace MathsProblems
                         {
                             resultlist.Add(i);
                             value = value / i;
+
+                            if (useCache)
+                            {
+                                List<Int64> list = null;
+                                if (Divisors.PrimeListOfDivisorsCache.TryGetValue(value, out list))
+                                {
+                                    foreach (var listVal in list)
+                                    {
+                                        resultlist.Add(listVal);
+                                    }
+                                    PrimeListOfDivisorsCache.Add(originalValue, resultlist);
+                                    return resultlist;
+                                }
+                            }
                             i = 2;
                         }
                     }
                 }
                 if (!Primes.HasMultiplier(value, resultlist))
                     resultlist.Add(value);
+                if (useCache)
+                    PrimeListOfDivisorsCache.Add(originalValue, resultlist);
                 return resultlist;
             }
 
@@ -102,42 +133,392 @@ namespace MathsProblems
         }
         internal class LargeDigitsDestroyer
         {
-            internal static string Degree_Numbers(int value, int degree)
+            internal static int CharToInt(char val)
+            {
+                return (int)val - (int)'0'; 
+            }
+
+            internal static List<int> IntToList(int val)
+            {
+                List<int> resultList = new List<int> ();
+                while (val >= 10)
+                {
+                    resultList.Insert(0, val % 10);
+                    val = val / 10;
+                }
+                resultList.Insert(0, val);
+                return resultList;
+            }
+
+            internal static List<int> StringToList(string val)
+            {
+                List<int> listResult = new List<int> ();
+                for (int i = 0; i < val.Length; i++)
+                {
+                    listResult.Add(CharToInt(val[i]));
+                }
+                return listResult;
+            }
+
+            internal static string Power_Numbers(int value, int degree)
             {
                 int digits = 0;
                 int digitsTemp = 0;
                 int sum = 0;
-                string strTemp = "1";
-                string strResult = "";
-
-                for (int j = 0; j < degree; j++)
+                string result = "";
+                List<int> listResult = new List<int> { };
+                List<int> listTemp = IntToList(value);
+                
+                for (int j = 1; j < degree; j++)
                 {
-                    for (int i = strTemp.Length - 1; i >= 0; i--)
+                    listResult.Clear();
+                    for (int i = listTemp.Count - 1; i >= 0; i--)
                     {
-                        digits = Convert.ToInt32(strTemp[i].ToString());
+                        digits = listTemp[i];
                         digitsTemp = digits * value + sum;
                         if (digitsTemp >= 10)
                         {
                             digits = digitsTemp % 10;
                             sum = (digitsTemp - (digitsTemp % 10)) / 10;
-                            strResult = digits.ToString() + strResult;
+                            listResult.Insert(0, digits);
                         }
                         else
                         {
                             sum = 0;
-                            strResult = digitsTemp.ToString() + strResult;
+                            listResult.Insert(0, digitsTemp);
                         }
                     }
                     if (digitsTemp >= 10)
                     {
                         sum = (digitsTemp - digits) / 10;
-                        strResult = sum + strResult;
+                            listResult.InsertRange(0, IntToList(sum));
+                        
                     }
                     sum = 0;
-                    strTemp = strResult;
-                    strResult = "";
+                    listTemp.Clear();
+                    listTemp.AddRange(listResult);
                 }
-                return strTemp;
+                foreach (var dig in listTemp)
+                {
+                    result += dig;
+                }
+                return result;
+            }
+
+            internal static string Divide_Two_Huge_Digits(string digit, string divider)
+            {
+                List<int> digitList = StringToList(digit);
+                List<int> dividerList = StringToList(divider);
+                List<int> tempdigit = new List<int>();
+                List<int> result = new List<int>();
+                int d = 0;
+                int count = 0;
+                string tempstr = "";
+                string resultstr = "";
+                string tempstr2 = "";
+                List<int> tempval = new List<int>();
+                count = dividerList.Count - tempdigit.Count;
+                while (digitList.Count >= count )
+                {
+                    tempstr2 = "";
+                    for (int i = 0; i < count; i++)
+                    {
+                        tempdigit.Add(digitList[0]);
+                        digitList.Remove(digitList[0]);
+                    }
+                    if (count > 1 && result.Count != 0)
+                    {
+                        for (int n = 0; n < count - 1; n++)
+                            result.Add(0);
+                    }
+                    if (!CheckDigitSmaler(tempdigit, dividerList))
+                    {
+                        if (digitList.Count != 0)
+                        {
+                            tempdigit.Add(digitList[0]);
+                            digitList.Remove(digitList[0]);
+                            if (result.Count != 0 && count > 0)
+                            {
+                                result.Add(0);
+                            }
+                        }
+                        else
+                            break;
+                            //DivisionOfNatural();
+                    } 
+                    
+                    do
+                    {
+                        d++;
+                        tempstr = Multiplication_Two_Huge_Digits(divider, d.ToString());
+                        tempval = StringToList(tempstr);
+                    }
+                    while (CheckDigitSmaler(tempdigit, tempval));
+
+                    result.Add(d - 1);
+                    tempstr = Multiplication_Two_Huge_Digits(divider, (d - 1).ToString());
+                    d = 0;
+
+                    foreach (var val in tempdigit)
+                        tempstr2 += val;
+                    tempdigit = StringToList(Difference_Two_Huge_Digits(tempstr2, tempstr));
+                    if (tempdigit.Count == 1 && tempdigit[0] == 0)
+                        tempdigit = new List<int>();
+                    count = dividerList.Count - tempdigit.Count;
+                }
+
+                if (digitList.Count != 0)
+                {
+                    foreach (var val in digitList)
+                        result.Add(0);
+                }
+                foreach (var val in result)
+                    resultstr += val;
+                //MathsProblemsForm.Log(digit + "    " + divider + " = " + resultstr);
+                return resultstr;
+            }
+
+            internal static string Difference_Two_Huge_Digits(string digit, string diff)
+            {
+                List<int> dig = new List<int> { };
+                List<int> digit2 = new List<int> { };
+                List<int> subVal = new List<int> { };
+                List<int> subVal1 = new List<int> { };
+                List<int> strResult = new List<int> { };
+                int digits1 = 0;
+                int digits2 = 0;
+                int digitsTemp = 0;
+                string result = "";
+
+                dig.AddRange(StringToList(digit));
+                digit2.AddRange(StringToList(diff));
+
+                if ((dig.Count >= digit2.Count) && (digit2.Count - 1 >= 0))
+                {
+                    if (dig.Count > digit2.Count)
+                    {
+                        subVal1.AddRange(dig.Take(dig.Count - digit2.Count));
+                        subVal.AddRange(dig.Skip(dig.Count - digit2.Count));
+                    }
+                    else
+                    {
+                        subVal.AddRange(dig);
+                    }
+                    for (int i = digit2.Count - 1; i >= 0; i--)
+                    {
+                        digits1 = subVal[i];
+                        digits2 = digit2[i];
+                        digitsTemp = digits1 - digits2;
+                        if (digitsTemp < 0)
+                        {
+                            if (i - 1 >= 0)
+                                subVal[i - 1] = subVal[i - 1] - 1;
+                            else
+                                subVal1[subVal1.Count - 1] = subVal1[subVal1.Count - 1] - 1;
+                            digits1 = digits1 + 10;
+                            digitsTemp = digits1 - digits2;
+                        }
+                        strResult.Insert(0, digitsTemp);
+                    }
+                    for (int j = subVal1.Count - 1; j >= 0; j--)
+                    {
+                        strResult.Insert(0, subVal1[j]);
+                    }
+                }
+
+                while (strResult.IndexOf(0) == 0 && strResult.Count > 1)
+                {
+                    strResult.Remove(strResult[0]);
+                }
+
+                foreach (var val in strResult)
+                    result += val;
+                //MathsProblemsForm.Log(digit + "    " + diff + " = " + result);
+            return result;
+            }
+
+            internal static bool CheckDigitSmaler(List<int> digitList, List<int> valueList)
+            {
+                if (digitList.Count > valueList.Count)
+                    return true;
+                if (digitList.Count < valueList.Count)
+                    return false;
+                for (int i = 0; i < digitList.Count; i++)
+                {
+                    if (digitList[i] > valueList[i])
+                        return true;
+                    if (digitList[i] < valueList[i])
+                        return false;
+                }
+                return true;
+            }
+
+            internal static string Multiplication_Two_Huge_Digits(string value, string value2)
+            {
+                List<int> digit = new List<int>();
+                List<int> digit2 = new List<int>();
+
+                if (value.Length < value2.Length)
+                {
+                    digit = StringToList(value);
+                    digit2 = StringToList(value2);
+                }
+                if (value.Length > value2.Length)
+                {
+                    digit = StringToList(value2);
+                    digit2 = StringToList(value);
+                }
+                if (value.Length == value2.Length)
+                {
+                    if (value[0] > value2[0])
+                    {
+                        digit = StringToList(value);
+                        digit2 = StringToList(value2);
+                    }
+                    else
+                    {
+                        digit = StringToList(value2);
+                        digit2 = StringToList(value);
+                    }
+                }
+
+                int digits = 0;
+                string digits2 = "";
+                int digitsTemp = 0;
+                int sum = 0;
+                string result = "0";
+
+                for (int i = digit.Count - 1; i >= 0 ; i--)
+                {
+                    List<int> strResult = new List<int>();
+                    List<int> tempList = new List<int>();
+
+                    for (int j = digit2.Count - 1; j >= 0; j--)
+                    {
+                        digitsTemp = digit[i] * digit2[j] + sum;
+
+                        if (digitsTemp >= 10)
+                        {
+                            digits = digitsTemp % 10;
+                            sum = (digitsTemp - (digitsTemp % 10)) / 10;
+                            strResult.Insert(0, digits);
+                        }
+                        else
+                        {
+                            sum = 0;
+                            strResult.Insert(0, digitsTemp);
+                        }
+                    }
+                    if (sum != 0)
+                    {
+                        tempList = IntToList(sum);
+                        for (int k = tempList.Count - 1; k >= 0; k--)
+                            strResult.Insert(0, tempList[k]);
+                    }
+                    foreach (var val in strResult)
+                        digits2 += val;
+                    for (int k = digit.Count - 1; k > i; k--)
+                        digits2 += "0";
+                    result = Summ_Two_Huge_Digits(result, digits2);
+                    digits2 = "";
+                    sum = 0;
+                }
+                //MathsProblemsForm.Log(value + " " + value2 + "  " + result);
+                return result;
+            }
+
+            internal static string Summ_Two_Huge_Digits(string value, string value2)
+            {
+                List<int> digit = new List<int> { };
+                List<int> digit2 = new List<int> { };
+                List<int> subVal = new List<int> { };
+                List<int> subVal1 = new List<int> { };
+                List<int> strResult = new List<int> { };
+                int digits = 0;
+                int digits1 = 0;
+                int digits2 = 0;
+                int digitsTemp = 0;
+                int sum = 0;
+                string result = "";
+
+                if (value.Length > value2.Length)
+                {
+                    digit.AddRange(StringToList(value));
+                    digit2.AddRange(StringToList(value2));
+                }
+                else
+                {
+                    digit.AddRange(StringToList(value2));
+                    digit2.AddRange(StringToList(value));
+                }
+
+                if ((digit.Count >= digit2.Count) && (digit2.Count - 1 >= 0))
+                {
+                    if (digit.Count > digit2.Count)
+                    {
+                        subVal1.AddRange(digit.Take(digit.Count - digit2.Count));
+                        subVal.AddRange(digit.Skip(digit.Count - digit2.Count));
+                    }
+                    else
+                    {
+                        subVal.AddRange(digit);
+                    }
+                    for (int i = digit2.Count - 1; i >= 0; i--)
+                    {
+                        digits1 = subVal[i];
+                        digits2 = digit2[i];
+                        digitsTemp = digits1 + digits2 + sum;
+
+                        if (digitsTemp >= 10)
+                        {
+                            digits = digitsTemp % 10;
+                            sum = (digitsTemp - (digitsTemp % 10)) / 10;
+                            strResult.Insert(0, digits);
+                        }
+                        else
+                        {
+                            sum = 0;
+                            strResult.Insert(0, digitsTemp);
+                        }
+                    }
+                    if (sum != 0)
+                    {
+                        for (int j = subVal1.Count - 1; j >= 0; j--)
+                        {
+                            digits1 = subVal1[j];
+                            digitsTemp = digits1 + sum;
+
+                            if (digitsTemp >= 10)
+                            {
+                                digits = digitsTemp % 10;
+                                sum = (digitsTemp - (digitsTemp % 10)) / 10;
+                                strResult.Insert(0, digits);
+                            }
+                            else
+                            {
+                                sum = 0;
+                                strResult.Insert(0, digitsTemp);
+                            }
+                        }
+                        if (digitsTemp >= 10)
+                        {
+                            sum = (digitsTemp - digits) / 10;
+                            strResult.Insert(0, sum);
+                        }
+                    }
+                    else
+                    {
+                        strResult.InsertRange(0, subVal1);
+                    }
+                }
+                else
+                    strResult.InsertRange(0, digit);
+                foreach (var dig in strResult)
+                {
+                    result += dig;
+                }
+                //MathsProblemsForm.Log(result);
+                return result;
             }
 
             internal static string Faktorial(int Faktorialvalue)
@@ -148,11 +529,14 @@ namespace MathsProblems
                 string strTemp = "1";
                 string strResult = "";
 
+                if (Faktorialvalue == 0)
+                    return "1";
+
                 for (int j = 2; j <= Faktorialvalue; j++)
                 {
                     for (int i = strTemp.Length - 1; i >= 0; i--)
                     {
-                        digits = Convert.ToInt32(strTemp[i].ToString());
+                        digits = CharToInt(strTemp[i]);
                         digitsTemp = digits * j + sum;
                         if (digitsTemp >= 10)
                         {
@@ -237,11 +621,11 @@ namespace MathsProblems
                 return fibonaccci_n;
             }
 
-            internal static string Numbers_Summ(int value)
+            internal static string Numbers_Summ(Int64 value)
             {
-                int digits = 0;
-                int digitsTemp = 0;
-                int sum = 0;
+                Int64 digits = 0;
+                Int64 digitsTemp = 0;
+                Int64 sum = 0;
                 string strTemp = "1";
                 string strResult = "";
 
@@ -249,7 +633,7 @@ namespace MathsProblems
                 {
                     for (int i = strTemp.Length - 1; i >= 0; i--)
                     {
-                        digits = Convert.ToInt32(strTemp[i].ToString());
+                        digits = CharToInt(strTemp[i]);
                         digitsTemp = digits + value + sum;
                         if (digitsTemp >= 10)
                         {
@@ -308,7 +692,7 @@ namespace MathsProblems
                     }
                     if (divList.IndexOf(digit) != -1)
                     {
-                        if (int.Parse(strDigit[strDigit.Length - 1].ToString()) == 0)
+                        if (CharToInt(strDigit[strDigit.Length - 1]) == 0)
                             strDigit = strDigit.Remove(strDigit.Length - 1, 1);
                         if ((length != 0) && (strDigit.Length - 2 >= length))
                         {
@@ -330,7 +714,7 @@ namespace MathsProblems
             return strDigit;
             }
         }
-        
+
         internal class Abundant_Digits
         {
                 internal static bool IsAbundant_Digit(int value)

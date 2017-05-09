@@ -113,8 +113,17 @@ namespace MathsProblems
             //this.RunTest(Problem42.Coded_triangle_numbers);
             //this.RunTest(Problem43.Sub_string_divisibility);
             //this.RunTest(Problem44.Pentagon_numbers);
-            this.RunTest(Problem45.Triangular_pentagonal_and_hexagonal);
-
+            //this.RunTest(Problem45.Triangular_pentagonal_and_hexagonal);
+            //this.RunTest(Problem46.Goldbachs_other_conjecture);
+            //this.RunTest(Problem47.Distinct_primes_factors);
+            //this.RunTest(Problem48.Self_powers);
+            //this.RunTest(Problem49.Prime_permutations);
+            //this.RunTest(Problem50.Consecutive_prime_sum);
+            //this.RunTest(Problem51.Prime_digit_replacements);
+            //this.RunTest(Problem52.Permuted_multiples);
+            //this.RunTest(Problem53.Combinatoric_selections);
+            //this.RunTest(Problem54.Poker_hands);
+            this.RunTest(Problem55.Lychrel_numbers);
         }
 
 

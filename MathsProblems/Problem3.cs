@@ -9,7 +9,7 @@ namespace MathsProblems
 
         internal static string Largest_prime_factor()
         {
-            var primes = Divisors.GetPrimeList(n);
+            var primes = Divisors.GetPrimeListOfDivisors(n);
             foreach (var prime in primes)
                 MathsProblemsForm.Log(prime.ToString());
             var maxPrime = primes[primes.Count - 1];
